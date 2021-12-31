@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StatusVaga {
+  ABERTA
+  ENTREVISTANDO
+  ENCERRADA
+}
+
+enum StatusCandidatura {
+  NAO_PROCESSADO
+  APROVADO
+  REJEITADO
+}
+
+model Vaga {
+  id                  Int        @id @default(autoincrement())
+  titulo              String     @db.VarChar(255)
+  descricao           String     @db.VarChar(8000)
+  requisitos          String     @db.VarChar(8000)
+  requisitosOpcionais String?    @db.VarChar(8000)
+  beneficios          String?    @db.VarChar(8000)
+  status              StatusVaga
+
+  createdAt DateTime @default(now())
+
+  Empresa     Empresa? @relation(fields: [empresaCnpj], references: [cnpj])
+  empresaCnpj String?  @db.VarChar(14)
+
+  Candidatura Candidatura[]
+}
+
+model Empresa {
+  cnpj               String @id @db.VarChar(14)
+  nome               String @db.VarChar(255)
+  especialidades     String @db.VarChar(255)
+  sobre              String @db.VarChar(255)
+  numeroFuncionarios Int
+  vagas              Vaga[]
+
+  createdAt DateTime @default(now())
+
+  contato   Contato? @relation(fields: [contatoId], references: [id])
+  contatoId Int?
+}
+
+model Candidato {
+  cpf          String @id @db.VarChar(11)
+  nomeCompleto String @db.VarChar(255)
+  educacao     String @db.VarChar(255)
+
+  createdAt DateTime @default(now())
+
+  contato   Contato? @relation(fields: [contatoId], references: [id])
+  contatoId Int?
+
+  Candidatura Candidatura[]
+}
+
+model Contato {
+  id          Int     @id @default(autoincrement())
+  email       String  @db.VarChar(255)
+  localizacao String  @db.VarChar(255)
+  telefone    String  @db.VarChar(11)
+  linkedInUrl String? @db.VarChar(255)
+  websiteUrl  String? @db.VarChar(255)
+
+  meuEnum StatusCandidatura
+
+  createdAt DateTime @default(now())
+
+  Empresa   Empresa[]
+  Candidato Candidato[]
+}
+
+model Candidatura {
+  id                String            @id @db.Char(6)
+  cartaApresentacao String            @db.VarChar(8000)
+  curriculo         String            @db.Char(36)
+  status            StatusCandidatura
+
+  createdAt DateTime @default(now())
+
+  idCandidato  Candidato @relation(fields: [candidatoCpf], references: [cpf])
+  candidatoCpf String    @db.VarChar(11)
+
+  idVaga Vaga @relation(fields: [vagaId], references: [id])
+  vagaId Int
+}
