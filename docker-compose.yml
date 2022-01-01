@@ -1,7 +1,23 @@
 version: '3.8'
 services:
-  db:
-    container_name: pg_container
+  querovaga:
+    container_name: querovaga
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run start:dev
+    env_file: .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+  postgres:
+    container_name: postgres
     image: postgres
     restart: unless-stopped
     environment:
@@ -11,6 +27,11 @@ services:
     volumes:
       - $HOME/Desktop/PostgreSql-Snippets/infile:/infile
       - pg_data:/var/lib/postgresql/data/
+    networks:
+      - app-network
     command: ["postgres", "-c", "log_statement=all"]
+networks:
+  app-network:
+    driver: bridge
 volumes:
   pg_data:
