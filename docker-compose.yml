@@ -30,6 +30,22 @@ services:
     networks:
       - app-network
     command: ["postgres", "-c", "log_statement=all"]
+  localstack:
+    image: localstack/localstack:latest
+    container_name: localstack
+    environment: 
+      - AWS_DEFAULT_REGION=us-east-1
+      - EDGE_PORT=4566
+      - SERVICES=lambda,s3
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    ports: 
+      - '4566-4583:4566-4583'
+    volumes: 
+      - "./.localstack:/tmp/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - app-network
 networks:
   app-network:
     driver: bridge
