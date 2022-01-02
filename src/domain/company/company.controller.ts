@@ -1,14 +1,12 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Controller, Get, Request, UseGuards } from '@nestjs/common';
 
-import { CompanyService } from './company.service';
-import { LoginDto } from './dto/login.dto';
+import { JwtAuthGuard } from '@app/auth/jwt-auth.guard';
 
 @Controller({ path: '/api/v1/company' })
 export class CompanyController {
-  constructor(private readonly service: CompanyService) {}
-
-  @Post('/login')
-  login(@Body() data: LoginDto): string {
-    return this.service.login(data);
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }

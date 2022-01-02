@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { CompanyRepositoryLocal } from './company.repository';
 
-import { LoginDto } from './dto/login.dto';
+import { Company } from './zod/company.zod';
 
 @Injectable()
 export class CompanyService {
-  login(data: LoginDto): string {
-    return JSON.stringify(data, null, 2);
+  constructor(private readonly companyRepository: CompanyRepositoryLocal) {}
+
+  async findOne(cnpj: string): Promise<Company> {
+    return await this.companyRepository.findOne(cnpj);
   }
 }

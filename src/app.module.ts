@@ -1,11 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { CompanyController } from './domain/company/company.controller';
 
+import { AuthModule } from './auth/auth.module';
 import { CompanyModule } from './domain/company/company.module';
+import { CompanyController } from './domain/company/company.controller';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
 @Module({
-  imports: [CompanyModule],
+  imports: [AuthModule, CompanyModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
