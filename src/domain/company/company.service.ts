@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CompanyRepositoryLocal } from './company.repository';
 
+import { CompanyRepositoryLocal } from './company.repository';
 import { Company } from './zod/company.zod';
 
 @Injectable()

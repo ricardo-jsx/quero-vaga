@@ -1,3 +1,6 @@
+import { Injectable } from '@nestjs/common';
+
+@Injectable()
 export class CompanyRepositoryLocal {
   private readonly companies = [
     { cnpj: '11111111111111', password: 'foo' },
@@ -5,6 +8,6 @@ export class CompanyRepositoryLocal {
   ];
 
   async findOne(cnpj: string) {
-    return this.companies.find((c) => c.cnpj == cnpj);
+    return this.companies.find(c => c.cnpj == cnpj);
   }
 }
