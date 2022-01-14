@@ -3,6 +3,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 
 import { CompanyModule } from '@app/domain/company/company.module';
+import { S3Module } from '@app/s3/s3.module';
 
 import { AuthService } from './auth.service';
 import { LocalStrategy } from './local.strategy';
@@ -17,6 +18,7 @@ import { AuthController } from './auth.controller';
       signOptions: { expiresIn: '300s' },
     }),
     CompanyModule,
+    S3Module,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
