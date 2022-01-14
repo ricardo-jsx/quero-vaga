@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 
-import { CompanyModule } from '@app/domain/company/company.module';
 import { S3Module } from '@app/s3/s3.module';
 
 import { AuthService } from './auth.service';
@@ -15,9 +14,8 @@ import { AuthController } from './auth.controller';
     PassportModule,
     JwtModule.register({
       secret: 'super-secret-key',
-      signOptions: { expiresIn: '300s' },
+      signOptions: { expiresIn: '3600s' },
     }),
-    CompanyModule,
     S3Module,
   ],
   controllers: [AuthController],

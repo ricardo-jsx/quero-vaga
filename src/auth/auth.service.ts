@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { CompanyService } from '@app/domain/company/company.service';
 import { Company } from '@app/domain/company/zod/company.zod';
+import { S3CompanyService } from '@app/s3/company/s3-company.service';
 
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private companyService: CompanyService,
+    private s3Service: S3CompanyService,
     private jwtService: JwtService,
   ) {}
 
   async validateCompany(cnpj: string, pass: string): Promise<Company> {
-    const company = await this.companyService.findOne(cnpj);
+    const company = await this.s3Service.get(cnpj);
 
     if (company && company.password === pass) {
       return company;

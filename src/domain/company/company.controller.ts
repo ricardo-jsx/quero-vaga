@@ -1,17 +1,22 @@
+import { Empresa } from '@prisma/client';
 import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpException,
   HttpStatus,
   Post,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 
 import { JwtAuthGuard } from '@app/auth/jwt-auth.guard';
 
 import { CreateCompanyRequestDto } from './dto/create-company.request.dto';
+import { GetCompanyRequestDto } from './dto/get-company-request.dto';
+import { GetCompanyUseCase } from './get-company.use-case';
 import {
   CreateCompanyUseCase,
   CreateCompanyResponseCode,
@@ -19,12 +24,21 @@ import {
 
 @Controller({ path: '/api/v1/company' })
 export class CompanyController {
-  constructor(private readonly createCompanyUseCase: CreateCompanyUseCase) {}
+  constructor(
+    private readonly createCompanyUseCase: CreateCompanyUseCase,
+    private readonly getCompanyUseCase: GetCompanyUseCase,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @Get()
+  @HttpCode(200)
+  async getProfile(@Request() req: GetCompanyRequestDto) {
+    const empresa = await this.getCompanyUseCase.execute(req);
+
+    if (!empresa)
+      throw new HttpException('Empresa não encontrada', HttpStatus.NOT_FOUND);
+
+    return empresa;
   }
 
   @Post()

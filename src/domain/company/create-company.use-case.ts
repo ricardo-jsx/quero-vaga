@@ -20,14 +20,13 @@ export class CreateCompanyUseCase {
   async execute(
     data: CreateCompanyRequestDto,
   ): Promise<CreateCompanyResponseCode> {
-    const company = await this.companyService.findOne(data.cnpj);
+    const company = await this.s3CompanyService.get(data.cnpj);
 
     if (company) return CreateCompanyResponseCode.DUPLICATE_COMPANY;
 
     // await this.s3CompanyService.createBucket();
     await this.s3CompanyService.upload(data);
-
-    // TODO: and Postgres
+    await this.companyService.create(data);
 
     return CreateCompanyResponseCode.SUCCESS;
   }

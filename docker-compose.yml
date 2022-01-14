@@ -19,13 +19,12 @@ services:
   postgres:
     container_name: postgres
     image: postgres
-    restart: unless-stopped
+    restart: always
     environment:
       POSTGRES_PASSWORD: docker
     ports:
       - "5432:5432"
     volumes:
-      - $HOME/Desktop/PostgreSql-Snippets/infile:/infile
       - pg_data:/var/lib/postgresql/data/
     networks:
       - app-network

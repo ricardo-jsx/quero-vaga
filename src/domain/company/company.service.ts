@@ -1,14 +1,31 @@
 import { Injectable } from '@nestjs/common';
+import { Empresa } from '@prisma/client';
 
-import { S3CompanyService } from '@app/s3/company/s3-company.service';
+import { PrismaService } from '@app/common/prisma.service';
 
-import { Company } from './zod/company.zod';
+import { CreateCompanyRequestDto } from './dto/create-company.request.dto';
 
 @Injectable()
 export class CompanyService {
-  constructor(private readonly s3Service: S3CompanyService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async findOne(cnpj: string): Promise<Company> {
-    return await this.s3Service.get(cnpj);
+  async create(data: CreateCompanyRequestDto): Promise<Empresa> {
+    return await this.prisma.empresa.create({
+      data: {
+        cnpj: data.cnpj,
+        nome: data.nome,
+        especialidades: data.especialidades,
+        sobre: data.sobre,
+        numeroFuncionarios: data.numeroFuncionarios,
+      },
+    });
+  }
+
+  async findOne(cnpj: string): Promise<Empresa> {
+    return await this.prisma.empresa.findUnique({
+      where: {
+        cnpj,
+      },
+    });
   }
 }
