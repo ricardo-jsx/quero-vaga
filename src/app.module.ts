@@ -7,9 +7,16 @@ import { CommonModule } from './common/common.module';
 
 import { CompanyController } from './domain/company/company.controller';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { JobOpportunityModule } from './domain/job-opportunity/job-opportunity.module';
 
 @Module({
-  imports: [AuthModule, CompanyModule, S3Module, CommonModule],
+  imports: [
+    AuthModule,
+    CompanyModule,
+    JobOpportunityModule,
+    S3Module,
+    CommonModule,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

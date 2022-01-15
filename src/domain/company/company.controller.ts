@@ -1,4 +1,3 @@
-import { Empresa } from '@prisma/client';
 import {
   Body,
   Controller,
