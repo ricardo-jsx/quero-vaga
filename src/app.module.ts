@@ -8,6 +8,7 @@ import { CommonModule } from './common/common.module';
 import { CompanyController } from './domain/company/company.controller';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { JobOpportunityModule } from './domain/job-opportunity/job-opportunity.module';
+import { ContactModule } from './domain/contact/contact.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JobOpportunityModule } from './domain/job-opportunity/job-opportunity.m
     JobOpportunityModule,
     S3Module,
     CommonModule,
+    ContactModule,
   ],
 })
 export class AppModule implements NestModule {

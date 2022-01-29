@@ -71,8 +71,6 @@ model Contato {
   linkedInUrl String? @db.VarChar(255)
   websiteUrl  String? @db.VarChar(255)
 
-  meuEnum StatusCandidatura
-
   createdAt DateTime @default(now())
 
   Empresa   Empresa[]
