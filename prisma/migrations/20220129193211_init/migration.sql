@@ -51,7 +51,6 @@ CREATE TABLE "Contato" (
     "telefone" VARCHAR(11) NOT NULL,
     "linkedInUrl" VARCHAR(255),
     "websiteUrl" VARCHAR(255),
-    "meuEnum" "StatusCandidatura" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Contato_pkey" PRIMARY KEY ("id")

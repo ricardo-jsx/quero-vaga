@@ -11,6 +11,7 @@ import { PutCompanyArchiveJobOpportunityUseCase } from './put-company-archive-jo
 
 @Module({
   imports: [CommonModule, CompanyModule],
+  exports: [JobOpportunityService],
   controllers: [JobOpportunityController],
   providers: [
     JobOpportunityService,

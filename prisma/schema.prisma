@@ -51,7 +51,8 @@ model Empresa {
 }
 
 model Candidato {
-  cpf          String @id @db.VarChar(11)
+  id           Int    @id @default(autoincrement())
+  cpf          String @db.VarChar(11)
   nomeCompleto String @db.VarChar(255)
   educacao     String @db.VarChar(255)
 
@@ -85,8 +86,8 @@ model Candidatura {
 
   createdAt DateTime @default(now())
 
-  idCandidato  Candidato @relation(fields: [candidatoCpf], references: [cpf])
-  candidatoCpf String    @db.VarChar(11)
+  Candidato   Candidato @relation(fields: [candidatoId], references: [id])
+  candidatoId Int
 
   idVaga Vaga @relation(fields: [vagaId], references: [id])
   vagaId Int
