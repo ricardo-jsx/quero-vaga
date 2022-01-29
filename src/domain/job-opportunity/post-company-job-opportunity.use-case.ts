@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
 import { CompanyTokenRequestDto } from '@app/common/company/company-token-request.dto';
+import { CompanyService } from '@app/domain/company/company.service';
 
 import { JobOpportunityService } from './job-opportunity.service';
 import { CreateJobOpportunityRequestDto } from './dto/create-job-opportunity-request.dto';
-import { CompanyService } from '../company/company.service';
 
 export enum CreateJobOpportunityResponse {
   SUCCESS = 'success',

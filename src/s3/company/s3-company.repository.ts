@@ -29,10 +29,10 @@ export class S3CompanyRepository {
       s3.createBucket(bucketParams, function (err, data) {
         if (err) {
           console.log('Error', err);
-          reject(null);
+          reject();
         } else {
           console.log('Success', data.Location);
-          resolve(null);
+          resolve();
         }
       });
     });
@@ -57,11 +57,11 @@ export class S3CompanyRepository {
           console.log(err);
           console.log('Error uploading data: ', data);
 
-          reject(null);
+          reject();
         } else {
           console.log('succesfully uploaded!!!');
 
-          resolve(null);
+          resolve();
         }
       });
     });
@@ -69,7 +69,7 @@ export class S3CompanyRepository {
     return promise;
   }
 
-  get(cnpj: string): Promise<S3CreateCompanyDTO> {
+  get(cnpj: string): Promise<S3CreateCompanyDTO | null> {
     const key = fromCNPJToKey(cnpj);
 
     return new Promise((resolve, reject) => {

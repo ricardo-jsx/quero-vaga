@@ -8,7 +8,7 @@ import { CreateContactRequestDto } from './dto/create-contact.request.dto';
 export class ContactService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findById(id: number): Promise<Contato> {
+  async findById(id: number): Promise<Contato | null> {
     return await this.prisma.contato.findUnique({
       where: {
         id,

@@ -13,7 +13,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateCompany(cnpj: string, pass: string): Promise<Company> {
+  async validateCompany(cnpj: string, pass: string): Promise<Company | null> {
     const company = await this.s3Service.get(cnpj);
 
     if (company && company.password === pass) {

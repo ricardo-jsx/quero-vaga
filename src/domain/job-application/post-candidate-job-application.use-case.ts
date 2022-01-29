@@ -28,10 +28,28 @@ export class PostCandidateJobApplicationUseCase {
       return CreateJobApplicationResponse.JOB_OPPORTUNITY_NOT_FOUND;
     }
 
+    const pin = await this.generatePin();
     const candidate = await this.service.createJobApplicationCandidate(body);
 
-    console.log('candidate', candidate);
+    await this.service.addCandidateToJobApplication({
+      candidateId: candidate.id,
+      jobOpportunityId: jobOpportunity.id,
+      pin,
+    });
 
     return CreateJobApplicationResponse.SUCCESS;
+  }
+
+  async generatePin(): Promise<string> {
+    const pin = Array(6)
+      .fill(null)
+      .map(() => Math.floor(Math.random() * 10))
+      .join('');
+
+    const jobApplication = await this.service.findOneByPin(pin);
+
+    if (jobApplication) return await this.generatePin();
+
+    return pin;
   }
 }

@@ -21,7 +21,7 @@ export class CompanyService {
     });
   }
 
-  async findOne(cnpj: string): Promise<Empresa> {
+  async findOne(cnpj: string): Promise<Empresa | null> {
     return await this.prisma.empresa.findUnique({
       where: {
         cnpj,

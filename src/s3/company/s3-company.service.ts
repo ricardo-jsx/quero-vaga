@@ -22,7 +22,7 @@ export class S3CompanyService {
     return await this.repository.upload(upload);
   }
 
-  async get(cnpj: string): Promise<S3CreateCompanyDTO> {
+  async get(cnpj: string): Promise<S3CreateCompanyDTO | null> {
     return await this.repository.get(cnpj);
   }
 }

@@ -49,7 +49,7 @@ export class JobOpportunityService {
     });
   }
 
-  async findOneById(id: number): Promise<Vaga> {
+  async findOneById(id: number): Promise<Vaga | null> {
     return await this.prisma.vaga.findUnique({
       where: { id },
     });

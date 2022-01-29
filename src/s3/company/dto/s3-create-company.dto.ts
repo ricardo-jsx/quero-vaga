@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { CreateCompanyRequestDto } from '../../../domain/company/dto/create-company.request.dto';
+import { CreateCompanyRequestDto } from '@app/domain/company/dto/create-company.request.dto';
 
 export const S3CreateCompanyDTO = z.object({
   cnpj: z.string(),
