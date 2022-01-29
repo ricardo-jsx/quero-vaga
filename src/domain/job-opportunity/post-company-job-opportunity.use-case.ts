@@ -4,15 +4,32 @@ import { CompanyTokenRequestDto } from '@app/common/company/company-token-reques
 
 import { JobOpportunityService } from './job-opportunity.service';
 import { CreateJobOpportunityRequestDto } from './dto/create-job-opportunity-request.dto';
+import { CompanyService } from '../company/company.service';
+
+export enum CreateJobOpportunityResponse {
+  SUCCESS = 'success',
+  COMPANY_HAS_NO_CONTACT = 'company_has_no_contact',
+}
 
 @Injectable()
 export class PostCompanyJobOpportunityUseCase {
-  constructor(private readonly service: JobOpportunityService) {}
+  constructor(
+    private readonly service: JobOpportunityService,
+    private readonly companyService: CompanyService,
+  ) {}
 
   async execute(
     req: CompanyTokenRequestDto,
     body: CreateJobOpportunityRequestDto,
-  ) {
-    return this.service.createCompanyJobOpportunity(req.user.cnpj, body);
+  ): Promise<CreateJobOpportunityResponse> {
+    const company = await this.companyService.findOne(req.user.cnpj);
+
+    if (!company.contatoId) {
+      return CreateJobOpportunityResponse.COMPANY_HAS_NO_CONTACT;
+    }
+
+    await this.service.createCompanyJobOpportunity(req.user.cnpj, body);
+
+    return CreateJobOpportunityResponse.SUCCESS;
   }
 }

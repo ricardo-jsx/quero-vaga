@@ -8,7 +8,6 @@ import {
   Post,
   Put,
   Request,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 
@@ -16,7 +15,10 @@ import { JwtAuthGuard } from '@app/auth/jwt-auth.guard';
 import { CompanyTokenRequestDto } from '@app/common/company/company-token-request.dto';
 
 import { GetCompanyJobOpportunityUseCase } from './get-company-job-opportunity.use-case';
-import { PostCompanyJobOpportunityUseCase } from './post-company-job-opportunity.use-case';
+import {
+  CreateJobOpportunityResponse,
+  PostCompanyJobOpportunityUseCase,
+} from './post-company-job-opportunity.use-case';
 import {
   PutCompanyArchiveJobOpportunityUseCase,
   ArchiveVagaResponse,
@@ -46,7 +48,19 @@ export class JobOpportunityController {
     @Request() req: CompanyTokenRequestDto,
     @Body() body: CreateJobOpportunityRequestDto,
   ) {
-    return await this.postCompanyJobOpportunityUseCase.execute(req, body);
+    const response = await this.postCompanyJobOpportunityUseCase.execute(
+      req,
+      body,
+    );
+
+    if (response === CreateJobOpportunityResponse.SUCCESS) return;
+
+    if (response === CreateJobOpportunityResponse.COMPANY_HAS_NO_CONTACT) {
+      throw new HttpException(
+        'Empresa precisa ter contato para criar uma vaga',
+        HttpStatus.FORBIDDEN,
+      );
+    }
   }
 
   @UseGuards(JwtAuthGuard)
