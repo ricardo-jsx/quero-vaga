@@ -6,6 +6,7 @@ import { JobOpportunityController } from './job-opportunity.controller';
 import { JobOpportunityService } from './job-opportunity.service';
 import { GetCompanyJobOpportunityUseCase } from './get-company-job-opportunity.use-case';
 import { PostCompanyJobOpportunityUseCase } from './post-company-job-opportunity.use-case';
+import { PutCompanyArchiveJobOpportunityUseCase } from './put-company-archive-job-opportunity.use-case';
 
 @Module({
   imports: [CommonModule],
@@ -14,6 +15,7 @@ import { PostCompanyJobOpportunityUseCase } from './post-company-job-opportunity
     JobOpportunityService,
     GetCompanyJobOpportunityUseCase,
     PostCompanyJobOpportunityUseCase,
+    PutCompanyArchiveJobOpportunityUseCase,
   ],
 })
 export class JobOpportunityModule {}

@@ -19,6 +19,15 @@ export class JobOpportunityService {
     });
   }
 
+  async archiveJobOpportunity(id: number): Promise<Vaga> {
+    return await this.prisma.vaga.update({
+      where: { id },
+      data: {
+        status: StatusVaga.ENCERRADA,
+      },
+    });
+  }
+
   async createCompanyJobOpportunity(
     cnpj: string,
     data: CreateJobOpportunityRequestDto,
