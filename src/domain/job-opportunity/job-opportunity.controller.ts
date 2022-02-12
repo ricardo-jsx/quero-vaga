@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -25,6 +26,8 @@ import {
 } from './put-company-archive-job-opportunity.use-case';
 import { CreateJobOpportunityRequestDto } from './dto/create-job-opportunity-request.dto';
 import { ArchiveJobOpportunityRequestDto } from './dto/archive-job-opportunity-request.dto';
+import { GetFilteredJobOpportunitiesUseCase } from './get-filtered-job-opportunities.use-case';
+import { FilterJobOpportunitiesDto } from './dto/filter-job-opportunities.dto';
 
 @Controller({ path: '/api/v1/job-opportunity' })
 export class JobOpportunityController {
@@ -32,6 +35,7 @@ export class JobOpportunityController {
     private readonly getCompanyJobOpportunityUseCase: GetCompanyJobOpportunityUseCase,
     private readonly postCompanyJobOpportunityUseCase: PostCompanyJobOpportunityUseCase,
     private readonly putCompanyArchiveJobOpportunityUseCase: PutCompanyArchiveJobOpportunityUseCase,
+    private readonly getFilteredJobOpportunitiesUseCase: GetFilteredJobOpportunitiesUseCase,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -80,5 +84,11 @@ export class JobOpportunityController {
     }
 
     throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+  }
+
+  @Get('/filter')
+  @HttpCode(200)
+  async filterJobOpportunities(@Query() filter: FilterJobOpportunitiesDto) {
+    return await this.getFilteredJobOpportunitiesUseCase.execute(filter);
   }
 }

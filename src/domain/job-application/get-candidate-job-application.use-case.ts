@@ -9,8 +9,6 @@ export class GetCandidateJobApplicationUseCase {
   constructor(private readonly service: JobApplicationService) {}
 
   async execute(pin: string): Promise<Option<Candidatura>> {
-    const jobApplication = await this.service.findOneByPin(pin);
-
-    return Option(jobApplication);
+    return await this.service.findOneByPin(pin);
   }
 }

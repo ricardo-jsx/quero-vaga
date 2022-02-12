@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Candidato } from '@prisma/client';
+import { Option } from 'monapt';
 
 import { PrismaService } from '@app/common/prisma.service';
 
@@ -11,9 +12,11 @@ export class JobApplicationService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findOneByPin(pin: string) {
-    return await this.prisma.candidatura.findUnique({
+    const candidatura = await this.prisma.candidatura.findUnique({
       where: { id: pin },
     });
+
+    return Option(candidatura);
   }
 
   async createJobApplicationCandidate(

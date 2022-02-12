@@ -8,6 +8,7 @@ import { JobOpportunityService } from './job-opportunity.service';
 import { GetCompanyJobOpportunityUseCase } from './get-company-job-opportunity.use-case';
 import { PostCompanyJobOpportunityUseCase } from './post-company-job-opportunity.use-case';
 import { PutCompanyArchiveJobOpportunityUseCase } from './put-company-archive-job-opportunity.use-case';
+import { GetFilteredJobOpportunitiesUseCase } from './get-filtered-job-opportunities.use-case';
 
 @Module({
   imports: [CommonModule, CompanyModule],
@@ -18,6 +19,7 @@ import { PutCompanyArchiveJobOpportunityUseCase } from './put-company-archive-jo
     GetCompanyJobOpportunityUseCase,
     PostCompanyJobOpportunityUseCase,
     PutCompanyArchiveJobOpportunityUseCase,
+    GetFilteredJobOpportunitiesUseCase,
   ],
 })
 export class JobOpportunityModule {}

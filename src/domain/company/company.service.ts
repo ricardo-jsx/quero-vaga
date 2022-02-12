@@ -26,6 +26,9 @@ export class CompanyService {
       where: {
         cnpj,
       },
+      include: {
+        contato: true,
+      },
     });
   }
 
