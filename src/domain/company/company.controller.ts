@@ -5,9 +5,10 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Post,
   Request,
-  Res,
   UseGuards,
 } from '@nestjs/common';
 
@@ -20,12 +21,14 @@ import {
   CreateCompanyUseCase,
   CreateCompanyResponseCode,
 } from './create-company.use-case';
+import { GetJobApplicationUseCase } from './get-job-application.use-case';
 
 @Controller({ path: '/api/v1/company' })
 export class CompanyController {
   constructor(
     private readonly createCompanyUseCase: CreateCompanyUseCase,
     private readonly getCompanyUseCase: GetCompanyUseCase,
+    private readonly getJobApplication: GetJobApplicationUseCase,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -38,6 +41,24 @@ export class CompanyController {
       throw new HttpException('Empresa não encontrada', HttpStatus.NOT_FOUND);
 
     return empresa;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/job-application/:id')
+  @HttpCode(200)
+  async getJobApplicationById(
+    @Request() req: GetCompanyRequestDto,
+    @Param('id', new ParseIntPipe()) id: number,
+  ) {
+    const candidatura = await this.getJobApplication.execute(id, req.user.cnpj);
+
+    if (candidatura.isEmpty)
+      throw new HttpException(
+        'Vaga não encontrada para a empresa',
+        HttpStatus.NOT_FOUND,
+      );
+
+    return candidatura.get();
   }
 
   @Post()

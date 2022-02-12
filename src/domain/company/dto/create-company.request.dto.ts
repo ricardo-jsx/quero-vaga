@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString, Length, Min } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, Length } from 'class-validator';
 
 export class CreateCompanyRequestDto {
   @Length(14, 14, { message: 'CNPJ deve conter 14 caracteres' })

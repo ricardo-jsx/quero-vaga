@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { rejects } from 'assert';
 import AWS = require('aws-sdk');
 import { S3CreateCompanyDTO } from './dto/s3-create-company.dto';
 
@@ -72,7 +71,7 @@ export class S3CompanyRepository {
   get(cnpj: string): Promise<S3CreateCompanyDTO | null> {
     const key = fromCNPJToKey(cnpj);
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       s3.getObject({ Bucket: BUCKET_NAME, Key: key }, function (err, data) {
         if (!data || !data.Body) {
           resolve(null);

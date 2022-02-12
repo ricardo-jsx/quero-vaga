@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Empresa } from '@prisma/client';
+import { Candidatura, Empresa } from '@prisma/client';
 
 import { PrismaService } from '@app/common/prisma.service';
 
@@ -25,6 +25,21 @@ export class CompanyService {
     return await this.prisma.empresa.findUnique({
       where: {
         cnpj,
+      },
+    });
+  }
+
+  async findJobApplications(id: number, cnpj: string): Promise<Candidatura[]> {
+    return await this.prisma.candidatura.findMany({
+      where: {
+        AND: [
+          { vagaId: id },
+          {
+            idVaga: {
+              empresaCnpj: cnpj,
+            },
+          },
+        ],
       },
     });
   }

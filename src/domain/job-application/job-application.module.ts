@@ -7,11 +7,16 @@ import { JobOpportunityModule } from '@app/domain/job-opportunity/job-opportunit
 import { JobApplicationController } from './job-application.controller';
 import { JobApplicationService } from './job-application.service';
 import { PostCandidateJobApplicationUseCase } from './post-candidate-job-application.use-case';
+import { GetCandidateJobApplicationUseCase } from './get-candidate-job-application.use-case';
 
 @Module({
   imports: [CommonModule, CompanyModule, JobOpportunityModule],
   exports: [JobApplicationService],
   controllers: [JobApplicationController],
-  providers: [JobApplicationService, PostCandidateJobApplicationUseCase],
+  providers: [
+    JobApplicationService,
+    PostCandidateJobApplicationUseCase,
+    GetCandidateJobApplicationUseCase,
+  ],
 })
 export class JobApplicationModule {}
