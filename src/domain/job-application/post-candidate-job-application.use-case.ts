@@ -4,9 +4,9 @@ import { JobOpportunityService } from '@app/domain/job-opportunity/job-opportuni
 
 import { JobApplicationService } from './job-application.service';
 import { CreateJobApplicationRequestDto } from './dto/create-job-application-request.dto';
+import { Pin } from '../../lib/value-object/pin';
 
 export enum CreateJobApplicationResponse {
-  SUCCESS = 'success',
   JOB_OPPORTUNITY_NOT_FOUND = 'job_opportunity_not_found',
 }
 
@@ -19,7 +19,7 @@ export class PostCandidateJobApplicationUseCase {
 
   async execute(
     body: CreateJobApplicationRequestDto,
-  ): Promise<CreateJobApplicationResponse> {
+  ): Promise<CreateJobApplicationResponse | Pin> {
     const jobOpportunity = await this.jobOpportunityService.findOneById(
       body.idVaga,
     );
@@ -34,13 +34,13 @@ export class PostCandidateJobApplicationUseCase {
     await this.service.addCandidateToJobApplication({
       candidateId: candidate.id,
       jobOpportunityId: jobOpportunity.id,
-      pin,
+      pin: pin.toString(),
     });
 
-    return CreateJobApplicationResponse.SUCCESS;
+    return pin;
   }
 
-  async generatePin(): Promise<string> {
+  async generatePin(): Promise<Pin> {
     const pin = Array(6)
       .fill(null)
       .map(() => Math.floor(Math.random() * 10))
@@ -48,8 +48,8 @@ export class PostCandidateJobApplicationUseCase {
 
     const jobApplication = await this.service.findOneByPin(pin);
 
-    if (jobApplication) return await this.generatePin();
+    if (jobApplication.isDefined) return await this.generatePin();
 
-    return pin;
+    return Pin.new(pin);
   }
 }

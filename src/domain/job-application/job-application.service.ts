@@ -51,7 +51,7 @@ export class JobApplicationService {
             id: pin,
             candidatoId: candidateId,
             cartaApresentacao: 'Hello I want to be hired',
-            curriculo: 's3aws-id',
+            curriculo: `${pin}.cv.pdf`,
             status: 'NAO_PROCESSADO',
           },
         },

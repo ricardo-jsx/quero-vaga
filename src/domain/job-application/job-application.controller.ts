@@ -11,6 +11,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Pin } from '@app/lib/value-object/pin';
 
 import { CreateJobApplicationRequestDto } from './dto/create-job-application-request.dto';
 import { GetCandidateJobApplicationUseCase } from './get-candidate-job-application.use-case';
@@ -19,6 +20,7 @@ import {
   PostCandidateJobApplicationUseCase,
 } from './post-candidate-job-application.use-case';
 import { PostUploadCvUseCase } from './post-upload-cv.use-case';
+import { PinDTO } from './dto/pin-dto';
 
 @Controller({ path: '/api/v1/job-application' })
 export class JobApplicationController {
@@ -35,16 +37,20 @@ export class JobApplicationController {
       body,
     );
 
+    if (response instanceof Pin) {
+      return response;
+    }
+
     if (response === CreateJobApplicationResponse.JOB_OPPORTUNITY_NOT_FOUND) {
       throw new HttpException('Vaga não encontrada', HttpStatus.NOT_FOUND);
     }
-
-    return;
   }
 
   @Get('/pin/:pin')
-  async getJobApplicationByPin(@Param('pin') pin: string) {
-    const response = await this.getJobApplicationByPinUseCase.execute(pin);
+  async getJobApplicationByPin(@Param() pinDTO: PinDTO) {
+    const response = await this.getJobApplicationByPinUseCase.execute(
+      pinDTO.pin,
+    );
 
     if (response.isEmpty)
       throw new HttpException(
@@ -58,7 +64,7 @@ export class JobApplicationController {
   @Post('/pin/:pin/upload')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
-    @Param('pin') pin: string,
+    @Param() pinDTO: PinDTO,
     @UploadedFile() file: Express.Multer.File,
   ) {
     if (!file) {
@@ -68,7 +74,7 @@ export class JobApplicationController {
       );
     }
 
-    await this.uploadCVUseCase.execute(pin, file);
+    await this.uploadCVUseCase.execute(pinDTO.pin, file);
   }
 }
 
