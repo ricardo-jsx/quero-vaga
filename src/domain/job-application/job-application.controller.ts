@@ -7,7 +7,10 @@ import {
   HttpStatus,
   Param,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { CreateJobApplicationRequestDto } from './dto/create-job-application-request.dto';
 import { GetCandidateJobApplicationUseCase } from './get-candidate-job-application.use-case';
@@ -15,12 +18,14 @@ import {
   CreateJobApplicationResponse,
   PostCandidateJobApplicationUseCase,
 } from './post-candidate-job-application.use-case';
+import { PostUploadCvUseCase } from './post-upload-cv.use-case';
 
 @Controller({ path: '/api/v1/job-application' })
 export class JobApplicationController {
   constructor(
     private readonly createCandidateJobApplicationUseCase: PostCandidateJobApplicationUseCase,
     private readonly getJobApplicationByPinUseCase: GetCandidateJobApplicationUseCase,
+    private readonly uploadCVUseCase: PostUploadCvUseCase,
   ) {}
 
   @Post('/candidate')
@@ -50,21 +55,25 @@ export class JobApplicationController {
     return response.get();
   }
 
-  // @UseGuards(JwtAuthGuard)
-  // @Get('/job-application/:id')
-  // @HttpCode(200)
-  // async getJobApplicationById(
-  //   @Request() req: GetCompanyRequestDto,
-  //   @Param('id') id: number,
-  // ) {
-  //   const candidatura = await this.getJobApplication.execute(id, req.user.cnpj);
+  @Post('/pin/:pin/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadFile(
+    @Param('pin') pin: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    if (!file) {
+      throw new HttpException(
+        'Arquivo enviado tem formato não suportado',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
 
-  //   if (candidatura.isEmpty)
-  //     throw new HttpException(
-  //       'Vaga não encontrada para a empresa',
-  //       HttpStatus.NOT_FOUND,
-  //     );
-
-  //   return candidatura.get();
-  // }
+    await this.uploadCVUseCase.execute(pin, file);
+  }
 }
+
+// const uploadCVOptions: MulterOptions = {
+//   fileFilter(req, file, cb) {
+//     cb(null, file.mimetype === 'application/pdf');
+//   },
+// };

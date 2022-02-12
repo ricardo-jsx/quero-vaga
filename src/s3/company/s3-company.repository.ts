@@ -8,10 +8,10 @@ const BUCKET_NAME = 'company-bucket';
 
 const s3 = new AWS.S3({
   credentials: {
-    accessKeyId: 'foo',
-    secretAccessKey: 'bar',
+    accessKeyId: process.env.AWS_KEY_ID,
+    secretAccessKey: process.env.AWS_KEY_SECRET,
   },
-  endpoint: 'http://localstack:4566',
+  endpoint: process.env.AWS_URL,
   s3ForcePathStyle: true,
 });
 
