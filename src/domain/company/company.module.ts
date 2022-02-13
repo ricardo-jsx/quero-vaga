@@ -8,6 +8,7 @@ import { CompanyService } from './company.service';
 import { CreateCompanyUseCase } from './create-company.use-case';
 import { GetCompanyUseCase } from './get-company.use-case';
 import { GetJobApplicationUseCase } from './get-job-application.use-case';
+import { UpdateCandidateJobApplicationUseCase } from './update-candidate-job-application.use-case';
 
 @Module({
   imports: [S3Module, CommonModule],
@@ -17,6 +18,7 @@ import { GetJobApplicationUseCase } from './get-job-application.use-case';
     GetCompanyUseCase,
     CreateCompanyUseCase,
     GetJobApplicationUseCase,
+    UpdateCandidateJobApplicationUseCase,
     CompanyService,
   ],
 })

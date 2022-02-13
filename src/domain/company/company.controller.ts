@@ -22,6 +22,11 @@ import {
   CreateCompanyResponseCode,
 } from './create-company.use-case';
 import { GetJobApplicationUseCase } from './get-job-application.use-case';
+import {
+  UpdateCandidateJobApplicationUseCase,
+  UpdateCandidateStatusResponse,
+} from './update-candidate-job-application.use-case';
+import { UpdateCandidateStatusDto } from './dto/update-candidate-status.dto';
 
 @Controller({ path: '/api/v1/company' })
 export class CompanyController {
@@ -29,6 +34,7 @@ export class CompanyController {
     private readonly createCompanyUseCase: CreateCompanyUseCase,
     private readonly getCompanyUseCase: GetCompanyUseCase,
     private readonly getJobApplication: GetJobApplicationUseCase,
+    private readonly updateCandidateJobApplicationUseCase: UpdateCandidateJobApplicationUseCase,
   ) {}
 
   @UseGuards(JwtAuthGuard)
@@ -59,6 +65,28 @@ export class CompanyController {
       );
 
     return candidatura.get();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('/job-application/candidate')
+  @HttpCode(201)
+  async postUpdateCandidateStatus(
+    @Request() req: GetCompanyRequestDto,
+    @Body() body: UpdateCandidateStatusDto,
+  ) {
+    const response = await this.updateCandidateJobApplicationUseCase.execute({
+      ...body,
+      cnpj: req.user.cnpj,
+    });
+
+    if (response === UpdateCandidateStatusResponse.JOB_APPLICATION_NOT_FOUND) {
+      throw new HttpException(
+        'Candidatura não encontrada',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return response;
   }
 
   @Post()
